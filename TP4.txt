@@ -1,0 +1,28 @@
+
+show tables ;
+
+SELECT COUNT(*) AS numCINEtu FROM etudiants;
+
+SELECT nom, prenom, DATEDIFF(CURDATE(), dateNaissance) AS age FROM etudiant;
+
+SELECT MAX(prixForm) AS plus_chere, MIN(prixForm) AS moins_chere FROM formation;
+
+SELECT SUM(prixForm) AS total_paiement
+FROM inscription
+WHERE numCINEtu = (SELECT numCINEtu FROM inscription GROUP BY numCINEtu HAVING COUNT(DISTINCT codeForm) = (SELECT COUNT(*) FROM formation));
+
+SELECT id_session, COUNT(DISTINCT id_etudiant) AS nombre_etudiants_inscrits
+FROM inscriptions
+GROUP BY id_session;
+
+SELECT DISTINCT numCINEtu FROM etudiant WHERE numCINEtu IN (SELECT DISTINCT numCINEtu FROM inscription);
+
+SELECT numCINEtu, COUNT(*) AS nombre_inscription
+FROM inscription
+GROUP BY numCINEtu;
+
+SELECT id_session, 
+       COUNT(CASE WHEN  TypeCours = 'Distantiel' THEN 1 END) AS inscriptions,
+       COUNT(CASE WHEN   TypeCours = 'Présentiel' THEN 1 END) AS inscriptions
+FROM inscription
+GROUP BY codeSess;
